@@ -23,9 +23,12 @@ public:
     void incepeZiuaDeMunca() const;
     bool gasesteMasaLibera();
     void primesteRezervare(Rezervari& rezervare);
-
     void aboneazaObservator(IObservator* obs);
-
+    int getMeseOcupate()  const;
+    int getMeseTotale()   const;
+    std::shared_ptr<Ospatar> gasestOspatar(const std::string& nume) const;
+    void promoveazaAngajat(const std::string& nume);
+    void afiseazaHartaMese() const;
     const std::string getNumeRestaurant() const;
 };
 

@@ -109,6 +109,23 @@ void Ospatar::executaSarcina() const {
     cout << "Ospatarul " << (getNume() ? getNume() : "") << " serveste clientii la mese.\n";
 }
 
+void Ospatar::afiseazaRezervariProprii() const {
+    if (rezervariPreluate.empty()) {
+        cout << "  Nu ai nicio rezervare preluata.\n";
+        return;
+    }
+    for (size_t i = 0; i < rezervariPreluate.size(); i++) {
+        cout << "  [" << i + 1 << "] ";
+        rezervariPreluate[i].getAllRezervari();
+    }
+}
+
+const Rezervari& Ospatar::getRezervare(int idx) const {
+    if (idx < 0 || idx >= (int)rezervariPreluate.size())
+        throw std::out_of_range("Index rezervare invalid!");
+    return rezervariPreluate[idx];
+}
+
 Angajat* Ospatar::clone() const {
     return new Ospatar(*this); 
 }

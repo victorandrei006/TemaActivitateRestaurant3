@@ -1,12 +1,11 @@
 # temaActivitateRestaurant
-Review#1 pentru Voicu Andrei Razvan
 Am construit acest proiect ca o simulare practică pentru administrarea unui restaurant, punând accent pe modul în care datele circulă între angajați, meniu și clienți. Totul este gândit să funcționeze interactiv, astfel încât oricine rulează programul să poată gestiona fluxul unei zile de muncă direct din consolă, fără să aibă nevoie de cunoștințe tehnice avansate.
 
-În centrul aplicației se află echipa restaurantului, formată din ospătari și bucătari. Programul permite organizarea acestora și afișarea detaliilor lor specifice prin concepte de POO, asigurându-se că fiecare membru al staff-ului este la locul potrivit în tura potrivită.
+În centrul aplicației se află echipa restaurantului, formată din ospătari, bucătari și manager. Programul permite organizarea acestora și afișarea detaliilor lor specifice prin concepte de POO, asigurându-se că fiecare membru al staff-ului este la locul potrivit.
 
-Meniul este și el o piesă esențială, fiind împărțit inteligent între preparate clasice și opțiuni vegane. Fiecare produs vine la pachet cu detalii despre preț, disponibilitate și alergeni, oferind posibilitatea de a modifica aceste date în timp real. Astfel, dacă un produs nu mai este disponibil sau prețul lui se schimbă, actualizarea se face instantaneu prin meniul interactiv al aplicației.
+Meniul este și el o piesă esențială, fiind împărțit între preparate clasice și opțiuni vegane. Fiecare produs vine la pachet cu detalii despre preț, disponibilitate și alergeni, oferind posibilitatea de a modifica aceste date în timp real. Astfel, dacă un produs nu mai este disponibil sau prețul lui se schimbă, actualizarea se face instantaneu prin meniul interactiv al aplicației.
 
-Logistica meselor este gestionată printr-o matrice de 6x6 care reprezintă planul fizic al restaurantului. Acest sistem de rezervări permite ocuparea celor 36 de locuri într-un mod organizat,ajutând la distribuirea clienților către ospătari. Este o soluție simplă și vizuală pentru a vedea exact care zone din restaurant sunt pline și care sunt încă libere pentru noi oaspeți.
+Logistica meselor este gestionată printr-o matrice de 5x5 care reprezintă planul fizic al restaurantului. Acest sistem de rezervări permite ocuparea celor 25 de locuri într-un mod organizat,ajutând la distribuirea clienților către ospătari. Este o soluție simplă și vizuală pentru a vedea exact care zone din restaurant sunt pline și care sunt încă libere pentru noi oaspeți.
 
 La pornire, aplicația își ia singură informațiile despre angajați, meniu și rezervări din fiserele CSV, eliminând nevoia de a introduce totul manual de fiecare dată.
 
@@ -17,3 +16,14 @@ Un rol central în aplicație îl joacă moștenirea, care mi-a permis să creez
 Pentru a asigura stabilitatea programului, am implementat o gestionare a resurselor folosind Smart Pointers. Prin utilizarea shared_ptr, am eliminat riscul scurgerilor de memorie, deoarece obiectele se dezalocă automat atunci când nu mai sunt necesare. De asemenea, am respectat regulile stricte de design ale claselor, definind constructori de copiere și operatori de atribuire pentru a gestiona corect șirurile de caractere alocate dinamic, prevenind astfel crash-urile cauzate de copierea greșită a obiectelor.
 
 Robustețea sistemului este completată de gestiunea excepțiilor și de utilizarea eficientă a bibliotecii standard (STL). Am integrat blocuri try-catch pentru a preveni închiderea forțată a programului în cazul unor erori, cum ar fi încercarea de a rezerva o masă care apare deja ocupată în matricea restaurantului. Totul este legat de elemente de tip static, care îmi permit să urmăresc statistici globale la nivelul întregului restaurant, oferind o imagine clară asupra întregului sistem de gestiune dintr-o perspectivă de ansamblu.
+
+Pentru tema 3 am implementat 3 design patterns Singleton, Observer si Strategy. De asemenea, am creat o clasa noua pentru facturarea comenzilor de catre ospatari, pentru a simula mai bine un software utilizat într-un restaurant. Am făcut meniul compus din switchuri mai complex, am creat două sisteme de gestionare a operațiilor din restaurant, o consolă mai restricționată pentru ospătari, care au nevoie sa prelucreze comenzi si să factureze nota de plată. Pentru manager, care are nevoie de comenzi mai complexe, am făcut un meniu cu toate operațiile posibile în restaurant.Poate monitoriza munca efectuată de ospătari, poate verifica notele de plată si suma încasată pe întreaga zi, unelte esențiale in management.
+
+Singleton este folosit pentru jurnalul de evenimente rezolvă problema unui log centralizat: nu vreau 10 jurnale separate în fiecare componentă, vreau unul singur accesibil de oriunde. Implementarea respectă toate restricțiile de constructor privat, copiere dezactivată, acces exclusiv prin getInstanta(). Orice eveniment semnificativ din sistem precum login, logout, rezervare confirmată, preț modificat, factură emisă este înregistrat automat.
+
+Observer pentru notificări rezolvă problema comunicării decuplate: când se confirmă o rezervare, managerul și recepția trebuie anunțate imediat, dar Restaurant nu trebuie să știe cine sunt aceștia. Prin SistemNotificari, pot adăuga sau elimina observatori la runtime fără nicio modificare în logica de rezervări.
+
+Strategy pentru calculul discounturilor rezolvă problema variabilității algoritmilor: nota de plată nu știe și nu trebuie să știe cum se calculează reducerea — primește un obiect IStrategieDiscount și îl aplică. Adăugarea unui nou tip de discount înseamnă o singură clasă nouă, fără nicio modificare în Factura sau în meniurile de utilizator.
+
+Clasa template Meniu<T> transformă repetitivitatea în genericitate. Fără template, MeniuNormal ar fi avut string tipCarne și getMeniuNormal(), iar MeniuZilnic ar fi avut int calorii și getCalorii() cod aproape identic duplicat. Cu Meniu<T>, informația extra este tratată uniform indiferent de tip, iar funcția template liberă afiseazaInfoExtra<T>() poate opera pe orice preparat care expune getInformatiiExtra().
+
